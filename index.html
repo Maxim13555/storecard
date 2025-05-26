@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<link rel="icon" href="images/StoreCart.png" type="image/x-icon">
+  <meta charset="UTF-8" />
+  
+  <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="StoreCart">
+<link rel="apple-touch-icon" href="images/StoreCart.png">
+
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>StoreCart</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background-color: #ffffff;
+    }
+
+    .search-bar {
+      width: 100%;
+      padding: 16px;
+      background-color: #ffffff;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      display: flex;
+      justify-content: center;
+    }
+
+    .search-wrapper {
+      position: relative;
+      width: 100%;
+      max-width: 600px;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 12px 40px 12px 40px;
+      font-size: 16px;
+      border: 2px solid #ddd;
+      border-radius: 10px;
+      outline: none;
+      box-sizing: border-box;
+      background-color: #fafafa;
+    }
+
+    .search-icon {
+      position: absolute;
+      top: 50%;
+      left: 12px;
+      transform: translateY(-50%);
+      color: #888;
+      pointer-events: none;
+      width: 20px;
+      height: 20px;
+    }
+
+    .button-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      padding: 20px;
+    }
+
+    .supermarket-card {
+      width: 90vw;
+      max-width: 320px;
+      background-color: #ffffff;
+      color: #333333;
+      border-radius: 16px;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      border: 1px solid #e0e0e0;
+      box-sizing: border-box;
+      text-align: center;
+      user-select: none;
+
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 24px 24px 24px;
+      transition: padding-bottom 0.4s ease;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .supermarket-card:hover {
+      transform: scale(1.02);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .supermarket-card img.logo {
+      width: 60%;
+      height: auto;
+      max-height: 60%;
+      object-fit: contain;
+      margin-bottom: 12px;
+    }
+
+    .supermarket-card span {
+      margin-top: 4px;
+    }
+
+    /* QR-Code Bereich, versteckt */
+    .qr-code {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s ease, padding-top 0.5s ease;
+      width: 100%;
+    }
+
+.supermarket-card.active {
+  padding-bottom: 130px;
+}
+
+.supermarket-card.active .qr-code {
+  max-height: 200px;
+  padding-top: 30px; /* hier angepasst */
+}
+
+
+
+    .qr-code img {
+      width: 90%;
+      max-height: 200px; /* größerer QR-Code */
+      border-radius: 12px;
+      object-fit: contain;
+      user-select: none;
+      pointer-events: none;
+    }
+
+    @media (max-width: 600px) {
+      .supermarket-card {
+        font-size: 16px;
+        max-width: 90vw;
+      }
+      .supermarket-card.active {
+        padding-bottom: 110px;
+      }
+      .supermarket-card.active .qr-code {
+        max-height: 160px;
+      }
+      .qr-code img {
+        max-height: 160px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="search-bar">
+    <div class="search-wrapper">
+      <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="11" cy="11" r="7" />
+        <line x1="16.5" y1="16.5" x2="22" y2="22" />
+      </svg>
+      <input type="text" id="searchInput" class="search-input" placeholder="поиск" />
+    </div>
+  </div>
+
+  <div class="button-container" id="supermarketList">
+    <div class="supermarket-card">
+      <img class="logo" src="images/logos/pyaterochka.png" alt=" Logo" />
+      <span>пятерочка | pyaterochka</span>
+      <div class="qr-code">
+        <img src="images/qrcodes/pyatoratchka.png" alt=" QR Code" />
+      </div>
+    </div>
+
+    <div class="supermarket-card">
+      <img class="logo" src="images/logos/magnit.png" alt=" Logo" />
+      <span>магнит | magnit</span>
+      <div class="qr-code">
+        <img src="images/qrcodes/magnit.png" alt=" QR Code" />
+      </div>
+	  
+	      </div>
+	    <div class="supermarket-card">
+      <img class="logo" src="images/logos/metro.avif" alt=" Logo" />
+      <span>Метро | metro</span>
+      <div class="qr-code">
+        <img src="images/qrcodes/metro.png" alt=" QR Code" />
+      </div>
+    </div>
+	  
+	      <div class="supermarket-card">
+      <img class="logo" src="images/logos/perekostok.svg" alt=" Logo" />
+      <span>Перекрёсток | perekostok</span>
+      <div class="qr-code">
+        <img src="images/qrcodes/perekostok.png" alt=" QR Code" />
+      </div>
+	  
+
+
+
+
+
+  <script>
+    const searchInput = document.getElementById('searchInput');
+    const supermarketList = document.getElementById('supermarketList');
+
+    searchInput.addEventListener('input', () => {
+      const filter = searchInput.value.toLowerCase();
+      const cards = supermarketList.querySelectorAll('.supermarket-card');
+
+      cards.forEach(card => {
+        const text = card.textContent.toLowerCase();
+        const isVisible = text.includes(filter);
+        card.style.display = isVisible ? 'flex' : 'none';
+        card.classList.remove('active'); // Klappt alle QR-Codes zu beim Filtern
+      });
+    });
+
+    supermarketList.addEventListener('click', (e) => {
+      const clickedCard = e.target.closest('.supermarket-card');
+      if (!clickedCard) return;
+
+      const currentlyActive = supermarketList.querySelector('.supermarket-card.active');
+
+      if (currentlyActive && currentlyActive !== clickedCard) {
+        currentlyActive.classList.remove('active');
+      }
+
+      clickedCard.classList.toggle('active');
+
+      if (clickedCard.classList.contains('active')) {
+        clickedCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    });
+  </script>
+
+</body>
+</html>
