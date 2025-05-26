@@ -125,21 +125,21 @@ max-width: 500px;
       margin-top: 4px;
     }
 
-    /* QR-Code Bereich, versteckt */
-    .qr-code {
-      max-height: none;
-      overflow: visible;
-      transition: max-height 0.5s ease, padding-top 0.5s ease;
-      width: 100%;
-    }
+.qr-code {
+  max-height: 0;
+  overflow: hidden;
+  padding-top: 0;
+  transition: max-height 0.5s ease, padding-top 0.5s ease;
+  width: 100%;
+}
 
 .supermarket-card.active {
   padding-bottom: 0;
 }
 
 .supermarket-card.active .qr-code {
-  max-height: 200px;
-  padding-top: 30px; /* hier angepasst */
+  max-height: 1000px; /* groß genug, damit alles sichtbar ist */
+  padding-top: 30px;
 }
 
 
