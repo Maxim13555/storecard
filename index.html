@@ -127,14 +127,14 @@ max-width: 500px;
 
     /* QR-Code Bereich, versteckt */
     .qr-code {
-      max-height: 0;
-      overflow: hidden;
+      max-height: none;
+      overflow: visible;
       transition: max-height 0.5s ease, padding-top 0.5s ease;
       width: 100%;
     }
 
 .supermarket-card.active {
-  padding-bottom: 130px;
+  padding-bottom: 0;
 }
 
 .supermarket-card.active .qr-code {
@@ -144,14 +144,15 @@ max-width: 500px;
 
 
 
-    .qr-code img {
-      width: 90%;
-      max-height: 200px; /* größerer QR-Code */
-      border-radius: 12px;
-      object-fit: contain;
-      user-select: none;
-      pointer-events: none;
-    }
+.qr-code img {
+  width: 100%;
+  max-width: 300px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  object-fit: contain;
+}
+
 
     @media (max-width: 600px) {
       .supermarket-card {
