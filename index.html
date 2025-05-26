@@ -110,7 +110,6 @@
       margin-top: 4px;
     }
 
-    /* Modal Styles */
     .modal {
       display: none;
       position: fixed;
@@ -148,6 +147,7 @@
       height: auto;
       border-radius: 12px;
       margin-top: 12px;
+      cursor: zoom-in;
     }
 
     .close {
@@ -263,7 +263,6 @@
       modalQRCode.src = qrCode;
 
       modal.style.display = 'flex';
-      // Optional: Fokus auf Modal für Zugänglichkeit
       modal.focus();
     });
 
@@ -277,10 +276,20 @@
       }
     });
 
-    // ESC-Taste schließt Modal
     window.addEventListener('keydown', (e) => {
       if (e.key === "Escape" && modal.style.display === 'flex') {
         modal.style.display = 'none';
+      }
+    });
+
+    // QR-Code im Modal klickbar für Vollbild
+    modalQRCode.addEventListener('click', () => {
+      if (modalQRCode.requestFullscreen) {
+        modalQRCode.requestFullscreen();
+      } else if (modalQRCode.webkitRequestFullscreen) {
+        modalQRCode.webkitRequestFullscreen();
+      } else if (modalQRCode.msRequestFullscreen) {
+        modalQRCode.msRequestFullscreen();
       }
     });
   </script>
