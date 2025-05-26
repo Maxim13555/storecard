@@ -120,28 +120,13 @@
     .supermarket-card span {
       margin-top: 4px;
     }
-
     .qr-code {
       max-height: 0;
       overflow: hidden;
       padding-top: 0;
       transition: max-height 0.5s ease, padding-top 0.5s ease;
       width: 100%;
-
-      background-color: #fff; /* Popup immer weiß */
-      color: #333;            /* Dunkle Schrift */
-      border-radius: 12px;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-      margin-top: 16px;
     }
-
-    /* Popup bleibt immer hell, auch im Dark Mode */
-    body.dark-mode .qr-code {
-      background-color: #fff !important;
-      color: #333 !important;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.2);
-    }
-
     .supermarket-card.active {
       padding-bottom: 0;
     }
