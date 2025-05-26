@@ -46,7 +46,7 @@
 
     .search-input {
       width: 100%;
-      padding: 12px 40px 12px 40px;
+      padding: 12px 40px;
       font-size: 16px;
       border: 2px solid #ddd;
       border-radius: 10px;
@@ -101,7 +101,6 @@
     .supermarket-card img.logo {
       width: 60%;
       height: auto;
-      max-height: 60%;
       object-fit: contain;
       margin-bottom: 12px;
     }
@@ -110,6 +109,7 @@
       margin-top: 4px;
     }
 
+    /* Modal */
     .modal {
       display: none;
       position: fixed;
@@ -118,7 +118,6 @@
       width: 100vw;
       height: 100vh;
       background-color: rgba(0,0,0,0.6);
-      display: flex;
       align-items: center;
       justify-content: center;
       padding: 20px;
@@ -129,7 +128,7 @@
       border-radius: 16px;
       max-width: 320px;
       width: 100%;
-      padding: 30px 25px 25px 25px;
+      padding: 30px 25px 25px;
       box-shadow: 0 4px 20px rgba(0,0,0,0.3);
       position: relative;
       text-align: center;
@@ -147,7 +146,7 @@
       height: auto;
       border-radius: 12px;
       margin-top: 12px;
-      cursor: zoom-in;
+      cursor: pointer;
     }
 
     .close {
@@ -165,6 +164,43 @@
       color: #000;
     }
 
+    /* Fullscreen QR view */
+    .fullscreen-view {
+      display: none;
+      position: fixed;
+      z-index: 3000;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: #000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .fullscreen-view img {
+      width: 100%;
+      height: auto;
+      max-height: 100%;
+      object-fit: contain;
+    }
+
+    #exitFullscreenBtn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      color: white;
+      font-size: 28px;
+      font-weight: bold;
+      background: rgba(0, 0, 0, 0.4);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      text-align: center;
+      line-height: 40px;
+      cursor: pointer;
+      z-index: 3100;
+    }
+
     @media (max-width: 600px) {
       .supermarket-card {
         font-size: 16px;
@@ -175,9 +211,10 @@
 </head>
 <body>
 
+  <!-- Suchleiste -->
   <div class="search-bar">
     <div class="search-wrapper">
-      <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+      <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
         <circle cx="11" cy="11" r="7" />
         <line x1="16.5" y1="16.5" x2="22" y2="22" />
       </svg>
@@ -185,6 +222,7 @@
     </div>
   </div>
 
+  <!-- Supermarkt-Karten -->
   <div class="button-container" id="supermarketList">
     <div class="supermarket-card">
       <img class="logo" src="images/logos/pyaterochka.png" alt="Logo" />
@@ -220,18 +258,34 @@
   </div>
 
   <!-- Modal -->
-  <div id="qrModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-describedby="modalDesc" style="display:none;">
+  <div id="qrModal" class="modal">
     <div class="modal-content">
-      <span id="closeModal" class="close" aria-label="Schließen">&times;</span>
+      <span id="closeModal" class="close">&times;</span>
       <img id="modalLogo" src="" alt="Logo" class="modal-logo" />
       <h2 id="modalTitle"></h2>
       <img id="modalQRCode" src="" alt="QR Code" class="modal-qr" />
     </div>
   </div>
 
+  <!-- Vollbildanzeige für QR-Code -->
+  <div id="fullscreenQR" class="fullscreen-view">
+    <span id="exitFullscreenBtn">&times;</span>
+    <img id="fullscreenQRImage" src="" alt="QR Code Vollbild" />
+  </div>
+
+  <!-- JavaScript -->
   <script>
     const searchInput = document.getElementById('searchInput');
     const supermarketList = document.getElementById('supermarketList');
+    const modal = document.getElementById('qrModal');
+    const modalLogo = document.getElementById('modalLogo');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalQRCode = document.getElementById('modalQRCode');
+    const closeModal = document.getElementById('closeModal');
+
+    const fullscreenView = document.getElementById('fullscreenQR');
+    const fullscreenImage = document.getElementById('fullscreenQRImage');
+    const exitFullscreenBtn = document.getElementById('exitFullscreenBtn');
 
     searchInput.addEventListener('input', () => {
       const filter = searchInput.value.toLowerCase();
@@ -239,16 +293,9 @@
 
       cards.forEach(card => {
         const text = card.textContent.toLowerCase();
-        const isVisible = text.includes(filter);
-        card.style.display = isVisible ? 'flex' : 'none';
+        card.style.display = text.includes(filter) ? 'flex' : 'none';
       });
     });
-
-    const modal = document.getElementById('qrModal');
-    const modalLogo = document.getElementById('modalLogo');
-    const modalTitle = document.getElementById('modalTitle');
-    const modalQRCode = document.getElementById('modalQRCode');
-    const closeModal = document.getElementById('closeModal');
 
     supermarketList.addEventListener('click', (e) => {
       const clickedCard = e.target.closest('.supermarket-card');
@@ -263,7 +310,6 @@
       modalQRCode.src = qrCode;
 
       modal.style.display = 'flex';
-      modal.focus();
     });
 
     closeModal.addEventListener('click', () => {
@@ -271,28 +317,25 @@
     });
 
     window.addEventListener('click', (e) => {
-      if (e.target === modal) {
-        modal.style.display = 'none';
-      }
+      if (e.target === modal) modal.style.display = 'none';
     });
 
     window.addEventListener('keydown', (e) => {
-      if (e.key === "Escape" && modal.style.display === 'flex') {
-        modal.style.display = 'none';
+      if (e.key === "Escape") {
+        if (modal.style.display === 'flex') modal.style.display = 'none';
+        if (fullscreenView.style.display === 'flex') fullscreenView.style.display = 'none';
       }
     });
 
-    // QR-Code im Modal klickbar für Vollbild
+    // Klick auf QR-Code → Vollbildanzeige
     modalQRCode.addEventListener('click', () => {
-      if (modalQRCode.requestFullscreen) {
-        modalQRCode.requestFullscreen();
-      } else if (modalQRCode.webkitRequestFullscreen) {
-        modalQRCode.webkitRequestFullscreen();
-      } else if (modalQRCode.msRequestFullscreen) {
-        modalQRCode.msRequestFullscreen();
-      }
+      fullscreenImage.src = modalQRCode.src;
+      fullscreenView.style.display = 'flex';
+    });
+
+    exitFullscreenBtn.addEventListener('click', () => {
+      fullscreenView.style.display = 'none';
     });
   </script>
-
 </body>
 </html>
