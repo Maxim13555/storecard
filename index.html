@@ -1,17 +1,16 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
+  <link rel="icon" href="images/StoreCart.png" type="image/x-icon" />
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  
-  <link rel="icon" href="images/StoreCart.png" type="image/x-icon">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="StoreCart">
-  <link rel="apple-touch-icon" href="images/storecart.png">
-  
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <meta name="apple-mobile-web-app-title" content="StoreCart" />
+  <link rel="apple-touch-icon" href="images/storecart.png" />
   <title>StoreCart</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700&display=swap" rel="stylesheet" />
+
   <style>
     html, body {
       margin: 0;
@@ -20,6 +19,8 @@
       width: 100%;
       font-family: 'Inter', sans-serif;
       background-color: #ffffff;
+      color: #333;
+      transition: background-color 0.3s, color 0.3s;
     }
 
     * {
@@ -36,12 +37,15 @@
       z-index: 1000;
       display: flex;
       justify-content: center;
+      align-items: center;
+      gap: 12px;
     }
 
     .search-wrapper {
       position: relative;
       width: 100%;
       max-width: 600px;
+      flex-grow: 1;
     }
 
     .search-input {
@@ -52,6 +56,9 @@
       border-radius: 10px;
       outline: none;
       background-color: #fafafa;
+      color: #333;
+      box-sizing: border-box;
+      transition: background-color 0.3s, color 0.3s, border-color 0.3s;
     }
 
     .search-icon {
@@ -63,6 +70,22 @@
       pointer-events: none;
       width: 20px;
       height: 20px;
+    }
+
+    #modeToggle {
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: #333;
+      user-select: none;
+      transition: color 0.3s ease;
+      outline-offset: 2px;
+    }
+
+    #modeToggle:hover,
+    #modeToggle:focus {
+      color: #000;
     }
 
     .button-container {
@@ -84,18 +107,22 @@
       cursor: pointer;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
       border: 1px solid #e0e0e0;
+      box-sizing: border-box;
       text-align: center;
       user-select: none;
       display: flex;
       flex-direction: column;
       align-items: center;
       padding: 24px;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      transition: padding-bottom 0.4s ease, background-color 0.3s, color 0.3s, box-shadow 0.3s, border-color 0.3s;
+      overflow: hidden;
+      position: relative;
     }
 
     .supermarket-card:hover {
       transform: scale(1.02);
       box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
 
     .supermarket-card img.logo {
@@ -110,59 +137,30 @@
       margin-top: 4px;
     }
 
-    /* Modal Styles */
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 2000;
-      left: 0; top: 0;
-      width: 100vw;
-      height: 100vh;
-      background-color: rgba(0,0,0,0.6);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-    }
-
-    .modal-content {
-      background: white;
-      border-radius: 16px;
-      max-width: 320px;
+    .qr-code {
+      max-height: 0;
+      overflow: hidden;
+      padding-top: 0;
+      transition: max-height 0.5s ease, padding-top 0.5s ease;
       width: 100%;
-      padding: 30px 25px 25px 25px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-      position: relative;
-      text-align: center;
     }
 
-    .modal-logo {
-      max-width: 150px;
-      height: auto;
-      margin-bottom: 12px;
+    .supermarket-card.active {
+      padding-bottom: 0;
     }
 
-    .modal-qr {
+    .supermarket-card.active .qr-code {
+      max-height: 1000px;
+      padding-top: 30px;
+    }
+
+    .qr-code img {
       width: 100%;
-      max-width: 280px;
+      max-width: 300px;
       height: auto;
-      border-radius: 12px;
-      margin-top: 12px;
-    }
-
-    .close {
-      position: absolute;
-      top: 12px;
-      right: 16px;
-      font-size: 28px;
-      font-weight: bold;
-      cursor: pointer;
-      color: #555;
-      user-select: none;
-    }
-
-    .close:hover {
-      color: #000;
+      display: block;
+      margin: 0 auto;
+      object-fit: contain;
     }
 
     @media (max-width: 600px) {
@@ -170,6 +168,56 @@
         font-size: 16px;
         max-width: 90vw;
       }
+
+      .supermarket-card.active {
+        padding-bottom: 110px;
+      }
+
+      .supermarket-card.active .qr-code {
+        max-height: 160px;
+      }
+
+      .qr-code img {
+        max-height: 160px;
+      }
+    }
+
+
+    /* DARK MODE */
+    body.dark-mode {
+      background-color: #121212;
+      color: #eee;
+    }
+
+    body.dark-mode .search-bar {
+      background-color: #1e1e1e;
+      box-shadow: 0 2px 4px rgba(255, 255, 255, 0.1);
+    }
+
+    body.dark-mode .search-input {
+      background-color: #2a2a2a;
+      border-color: #555;
+      color: #eee;
+    }
+
+    body.dark-mode .search-input::placeholder {
+      color: #bbb;
+    }
+
+    body.dark-mode .supermarket-card {
+      background-color: #222;
+      color: #ddd;
+      border-color: #444;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.7);
+    }
+
+    body.dark-mode .supermarket-card:hover {
+      box-shadow: 0 6px 16px rgba(255, 255, 255, 0.15);
+      transform: scale(1.02);
+    }
+
+    body.dark-mode #modeToggle {
+      color: #eee;
     }
   </style>
 </head>
@@ -183,13 +231,14 @@
       </svg>
       <input type="text" id="searchInput" class="search-input" placeholder="поиск" />
     </div>
+    <button id="modeToggle" aria-label="Toggle Dark Mode" title="Dark Mode an/aus">🌙</button>
   </div>
 
   <div class="button-container" id="supermarketList">
     <div class="supermarket-card">
       <img class="logo" src="images/logos/pyaterochka.png" alt="Logo" />
       <span>пятерочка | pyaterochka</span>
-      <div class="qr-code" style="display:none;">
+      <div class="qr-code">
         <img src="images/qrcodes/pyatoratchka.png" alt="QR Code" />
       </div>
     </div>
@@ -197,7 +246,7 @@
     <div class="supermarket-card">
       <img class="logo" src="images/logos/magnit.png" alt="Logo" />
       <span>магнит | magnit</span>
-      <div class="qr-code" style="display:none;">
+      <div class="qr-code">
         <img src="images/qrcodes/magnit.png" alt="QR Code" />
       </div>
     </div>
@@ -205,7 +254,7 @@
     <div class="supermarket-card">
       <img class="logo" src="images/logos/metro.avif" alt="Logo" />
       <span>Метро | metro</span>
-      <div class="qr-code" style="display:none;">
+      <div class="qr-code">
         <img src="images/qrcodes/metro.png" alt="QR Code" />
       </div>
     </div>
@@ -213,25 +262,16 @@
     <div class="supermarket-card">
       <img class="logo" src="images/logos/perekostok.svg" alt="Logo" />
       <span>Перекрёсток | perekostok</span>
-      <div class="qr-code" style="display:none;">
+      <div class="qr-code">
         <img src="images/qrcodes/perekostok.png" alt="QR Code" />
       </div>
-    </div>
-  </div>
-
-  <!-- Modal -->
-  <div id="qrModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-describedby="modalDesc" style="display:none;">
-    <div class="modal-content">
-      <span id="closeModal" class="close" aria-label="Schließen">&times;</span>
-      <img id="modalLogo" src="" alt="Logo" class="modal-logo" />
-      <h2 id="modalTitle"></h2>
-      <img id="modalQRCode" src="" alt="QR Code" class="modal-qr" />
     </div>
   </div>
 
   <script>
     const searchInput = document.getElementById('searchInput');
     const supermarketList = document.getElementById('supermarketList');
+    const modeToggle = document.getElementById('modeToggle');
 
     searchInput.addEventListener('input', () => {
       const filter = searchInput.value.toLowerCase();
@@ -241,49 +281,30 @@
         const text = card.textContent.toLowerCase();
         const isVisible = text.includes(filter);
         card.style.display = isVisible ? 'flex' : 'none';
+        card.classList.remove('active'); // Klappt alle QR-Codes zu beim Filtern
       });
     });
-
-    const modal = document.getElementById('qrModal');
-    const modalLogo = document.getElementById('modalLogo');
-    const modalTitle = document.getElementById('modalTitle');
-    const modalQRCode = document.getElementById('modalQRCode');
-    const closeModal = document.getElementById('closeModal');
 
     supermarketList.addEventListener('click', (e) => {
       const clickedCard = e.target.closest('.supermarket-card');
       if (!clickedCard) return;
 
-      const logo = clickedCard.querySelector('img.logo').src;
-      const title = clickedCard.querySelector('span').textContent;
-      const qrCode = clickedCard.querySelector('.qr-code img').src;
+      const currentlyActive = supermarketList.querySelector('.supermarket-card.active');
+      if (currentlyActive && currentlyActive !== clickedCard) {
+        currentlyActive.classList.remove('active');
+      }
 
-      modalLogo.src = logo;
-      modalTitle.textContent = title;
-      modalQRCode.src = qrCode;
+      clickedCard.classList.toggle('active');
 
-      modal.style.display = 'flex';
-      // Optional: Fokus auf Modal für Zugänglichkeit
-      modal.focus();
-    });
-
-    closeModal.addEventListener('click', () => {
-      modal.style.display = 'none';
-    });
-
-    window.addEventListener('click', (e) => {
-      if (e.target === modal) {
-        modal.style.display = 'none';
+      if (clickedCard.classList.contains('active')) {
+        clickedCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
     });
 
-    // ESC-Taste schließt Modal
-    window.addEventListener('keydown', (e) => {
-      if (e.key === "Escape" && modal.style.display === 'flex') {
-        modal.style.display = 'none';
-      }
-    });
-  </script>
-
-</body>
-</html>
+    modeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+      if(document.body.classList.contains('dark-mode')) {
+        modeToggle.textContent = '☀️';
+      } else {
+        modeToggle.textContent = '🌙';
+     
